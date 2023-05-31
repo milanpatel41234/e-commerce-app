@@ -9,11 +9,15 @@ const productsArr = [
       price: 100,
       imageUrl:
         "https://prasadyash2411.github.io/ecom-website/img/Album%201.png",
+      id:
+        "https://prasadyash2411.github.io/ecom-website/img/Album%201.png",
     },
     {
       title: "Black and white Colors",
       price: 50,
       imageUrl:
+        "https://prasadyash2411.github.io/ecom-website/img/Album%202.png",
+      id:
         "https://prasadyash2411.github.io/ecom-website/img/Album%202.png",
     },
     {
@@ -21,11 +25,15 @@ const productsArr = [
       price: 70,
       imageUrl:
         "https://prasadyash2411.github.io/ecom-website/img/Album%203.png",
+      id:
+        "https://prasadyash2411.github.io/ecom-website/img/Album%203.png",
     },
     {
       title: "Blue Color",
       price: 100,
       imageUrl:
+        "https://prasadyash2411.github.io/ecom-website/img/Album%204.png",
+      id:
         "https://prasadyash2411.github.io/ecom-website/img/Album%204.png",
     },
   ];
@@ -33,9 +41,7 @@ const productsArr = [
 function ItemsCard() {
 
   const Product = productsArr.map((item)=>(
-    <Item price={item.price}
-   title={item.title} 
-   img={item.imageUrl}
+    <Item item={item}
    key={item.imageUrl} />
   ));
   return <Container style={{ width: '70%' }}>

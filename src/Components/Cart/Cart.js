@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Container,
   Row,
@@ -8,32 +8,41 @@ import {
   Badge,
   Card,
 } from "react-bootstrap";
+import CartContext from "../Store/Cart-Context";
 
 const Cart = (props) => {
-  const items = [
-    {
-      title: "Colors",
-      price: 100,
-      imageUrl:
-        "https://prasadyash2411.github.io/ecom-website/img/Album%201.png",
-      quantity: 2,
-    },
-    {
-      title: "Black and white Colors",
-      price: 50,
-      imageUrl:
-        "https://prasadyash2411.github.io/ecom-website/img/Album%202.png",
-      quantity: 3,
-    },
-{
-      title: "Yellow and Black Colors",
-      price: 70,
-      imageUrl:
-        "https://prasadyash2411.github.io/ecom-website/img/Album%203.png",
-      quantity: 1,
-    },
-  ];
+  const ctx = useContext(CartContext);
 
+  const RemoveItem = (item) => {
+    ctx.removeItem(item);
+  };
+  let CartItems = <h4> Upps! No items Available</h4>;
+  if (ctx.items.length > 0) {
+    CartItems = ctx.items.map((item, index) => (
+      <tr key={item.id}>
+        <td>{index + 1}</td>
+        <td>
+          <Card.Img
+            style={{ height: "15vh", width: "15vh" }}
+            variant="top mx-6"
+            src={`${item.imageUrl}`}
+          />
+          <Row className="mx-3">{item.title}</Row>{" "}
+        </td>
+        <td>{item.price}</td>
+        <td>
+          <Badge bg="secondary">{item.quantity}</Badge>
+          <Button
+            onClick={RemoveItem.bind(null, item)}
+            variant="danger mx-1 my-1"
+            size="sm"
+          >
+            Remove
+          </Button>
+        </td>
+      </tr>
+    ));
+  }
   return (
     <Container
       style={{
@@ -44,25 +53,32 @@ const Cart = (props) => {
         paddingTop: "1rem",
         backgroundColor: "white",
         position: "fixed",
-        height: "80vh",
-       
+        height: "30rem",
+
         border: "1px solid black",
       }}
     >
-      <Button onClick={props.onClick} style={{ float: "right" }} variant="danger" size="sm">
+      <Button
+        onClick={props.onClick}
+        style={{ float: "right" }}
+        variant="danger"
+        size="sm"
+      >
         X
       </Button>
       <h3>Cart</h3>
-      <Container  style={{
-      width:'28rem',
-        zIndex: "11",
-        paddingTop: "2rem",
-        backgroundColor: "white",
-        position: "fixed",
-        height: "55vh",
-        overflow: "scroll",
-        border: "1px solid black",
-      }}>
+      <Container
+        style={{
+          width: "29rem",
+          zIndex: "11",
+          paddingTop: "2rem",
+          backgroundColor: "white",
+          position: "fixed",
+          height: "55vh",
+          overflow: "scroll",
+          border: "1px solid black",
+        }}
+      >
         <Row>
           <Col>
             <Table striped bordered hover>
@@ -74,43 +90,32 @@ const Cart = (props) => {
                   <th>Quantity</th>
                 </tr>
               </thead>
-              <tbody>
-                {items.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <Card.Img
-                        style={{ height: "15vh", width: "15vh" }}
-                        variant="top mx-6"
-                        src={`${item.imageUrl}`}
-                      />
-                      <Row className="mx-3">{item.title}</Row>{" "}
-                    </td>
-                    <td>{item.price}</td>
-                    <td>
-                      <Badge bg="secondary">{item.quantity}</Badge>
-                      <Button variant="danger mx-1 my-1" size="sm">
-                        Remove
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              <tbody>{CartItems}</tbody>
             </Table>
           </Col>
         </Row>
       </Container>
-      <Button
-        variant="info"
+     
+      <Row
         style={{
           position: "absolute",
           bottom: "0",
           marginTop: "auto",
-          marginBottom: ".3rem",
+         
         }}
       >
-        Purchase
-      </Button>
+         <Col>
+            <Table>
+              <thead>
+                <tr>
+                  <td style={{width:'10rem'}}><b>TOTAL-</b> Rs {ctx.totalAmount}</td>
+                  <td><Button variant="info">Purchase</Button></td>
+                  
+                </tr>
+              </thead>
+            </Table>
+          </Col>
+      </Row>
     </Container>
   );
 };
