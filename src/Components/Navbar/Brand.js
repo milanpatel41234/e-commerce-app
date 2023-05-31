@@ -5,7 +5,7 @@ function Brand() {
   return (
     <Container
       style={{
-        marginTop: "15vh",
+      
         backgroundColor: "rgb(105, 99, 99)",
         color: "white",
         height:'15vh',

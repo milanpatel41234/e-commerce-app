@@ -1,18 +1,29 @@
-import Container from "react-bootstrap/Container";
+import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 
-function Footer() {
+const Footer = () => {
   return (
-    <Container
-      style={{
-        backgroundColor: "aqua",
-        color: "white",
-        justifyContent:'center',
-        marginBlockStart:'10vh'
-      }}
-    >
-        <h1>The Generics</h1>
-    </Container>
+    <footer className="bg-dark text-light mt-auto">
+      <Container>
+        <Row>
+          <Col>
+            <h5>Footer Title</h5>
+            <p>Footer content goes here.</p>
+          </Col>
+         
+          <Col>
+            <h5>Contact</h5>
+            <p>123 Street, City, State</p>
+            <p>Email: info@example.com</p>
+            <p>Phone: (123) 456-7890</p>
+          </Col>
+        </Row>
+      </Container>
+      <div className="text-center py-3">
+        &copy; {new Date().getFullYear()} Your Website. All rights reserved.
+      </div>
+    </footer>
   );
-}
+};
 
 export default Footer;
