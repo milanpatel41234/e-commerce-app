@@ -8,7 +8,6 @@ import CartContext from "../Store/Cart-Context";
 function Item(props) {
     const ctx = useContext(CartContext);
     const AddItem=(item)=>{
-        console.log(item)
     ctx.addItem(item)
     }
   return (

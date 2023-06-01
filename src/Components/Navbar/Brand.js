@@ -5,11 +5,10 @@ function Brand() {
   return (
     <Container
       style={{
-      
+        position:'relative',
         backgroundColor: "rgb(105, 99, 99)",
         color: "white",
         height:'15vh',
-        justifyContent:'center'
       }}
     >
       <Row className="justify-content-md-center">
