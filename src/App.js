@@ -7,6 +7,7 @@ import CartProvider from "./Components/Store/CartProvider";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./Pages/Home";
 import About from "./Pages/About";
+import MovieStore from "./Pages/MovieStore";
 
 function App() {
   const [CartState,setCartState] = useState(false);
@@ -20,7 +21,7 @@ function App() {
   const router = createBrowserRouter([
     {path:'/', element:  <Home cartstate={CartState} hidecart={HideCart}/>},
     {path:'/about', element:  <About/>},
-    // {path:'/store', element:  <Store/>},
+    {path:'/store', element:  <MovieStore/>},
   ])
   return (
     <div className="layout">

@@ -16,7 +16,7 @@ const Cart = (props) => {
   const RemoveItem = (item) => {
     ctx.removeItem(item);
   };
-  let CartItems = <h4> Upps! No items Available</h4>;
+  let CartItems = <tr><td> Upps! No items Available</td></tr>;
   if (ctx.items.length > 0) {
     CartItems = ctx.items.map((item, index) => (
       <tr key={item.id}>
