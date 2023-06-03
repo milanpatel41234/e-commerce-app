@@ -8,11 +8,13 @@ function Brand() {
         position:'relative',
         backgroundColor: "rgb(105, 99, 99)",
         color: "white",
-        height:'15vh',
+        height:'11rem',
+        paddingTop:'5.5rem',
+        marginBottom:'.5rem'
       }}
     >
       <Row className="justify-content-md-center">
-        <h1>The Generics</h1>
+        <h1><i>The Generics</i></h1>
       </Row>
     </Container>
   );
