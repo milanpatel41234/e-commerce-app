@@ -8,8 +8,8 @@ function Brand() {
         position:'relative',
         backgroundColor: "rgb(105, 99, 99)",
         color: "white",
-        height:'11rem',
-        paddingTop:'5.5rem',
+        height:'9rem',
+        paddingTop:'4.5rem',
         marginBottom:'.5rem'
       }}
     >

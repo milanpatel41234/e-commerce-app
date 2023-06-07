@@ -1,24 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
+import MovieList from "../Components/MovieStore/MovieList";
+import AddMovieForm from "../Components/MovieStore/AddMovieForm";
 
-const Movie = (props) => {
-  return (
-    <Container>
-      <li>
-        <h3>{props.item.title}</h3>
-        <b>Release date: {props.item.release_date}</b>
-        <p>{props.item.opening_crawl}</p>
-        <Button variant="info">Buy Movie</Button>
-      </li>
-    </Container>
-  );
-};
 
 function MovieStore() {
   const [movies, setMovies] = useState([]);
+  const [fetchButton, setfetchButton] = useState(
+   <Button variant="primary" disabled>
+    <Spinner
+      as="span"
+      animation="border"
+      size="sm"
+      role="status"
+      aria-hidden="true"
+    />
+    Loading...
+  </Button>
+  );
 
-  async function fatchfilms() {
-    setbtn( <Button variant="primary" disabled>
+  async function fetchfilms() {
+    setfetchButton( <Button variant="primary" disabled>
     <Spinner
       as="span"
       animation="border"
@@ -29,30 +31,48 @@ function MovieStore() {
     Loading...
   </Button>)
     try {
-      const response = await fetch("https://swapi.dev/api/films/");
+      const response = await fetch("https://moviestore-9dbbc-default-rtdb.firebaseio.com/movielist.json");
+      if(!response.ok){
+        throw new Error('Unable to fetch movies! Something went wronge.')
+      }else{
       const data = await response.json();
-      setMovies(data.results);
-      setbtn( <Button variant="success" disabled>
-      Movies Fatched
+      const fetchedmovies = []
+      for(const key in data){
+        const obj = {
+          name:data[key].name,
+          date:data[key].date,
+          details:data[key].details,
+          key:key
+        }
+         fetchedmovies.push(obj)
+      }
+      setMovies(fetchedmovies);
+      setfetchButton( <Button variant="success" disabled>
+      Your Movies
     </Button>)
+      }
     } catch (error) {
-      console.log(error);
-    }
+        setfetchButton(<Button variant="danger" disabled>
+        {error.message}
+      </Button>)
+    } 
   }
-  const [btn, setbtn] = useState(
-    <Button variant="info" onClick={fatchfilms}>
-      Fatch Movies
-    </Button>
-  );
+ useEffect(()=>{
+    fetchfilms()
+ },[])
 
-  const MovieList = movies.map((item) => {
-    return <Movie key={item.episode_id} item={item} />;
+  const List = movies.map((item) => {
+    return <MovieList key={item.key} item={item} />
   });
+
 
   return (
     <>
-      {btn}
-      {MovieList}
+   <Container style={{display:'flex', flexDirection:'column',width:'70%'}}>
+   <AddMovieForm onRefresh={fetchfilms}/>
+      {fetchButton}
+      {List}
+   </Container>
     </>
   );
 }
