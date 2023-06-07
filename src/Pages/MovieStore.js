@@ -62,7 +62,7 @@ function MovieStore() {
  },[])
 
   const List = movies.map((item) => {
-    return <MovieList key={item.key} item={item} />
+    return <MovieList onRefresh={fetchfilms} key={item.key} item={item} />
   });
 
 

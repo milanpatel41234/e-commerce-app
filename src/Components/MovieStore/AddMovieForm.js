@@ -22,13 +22,11 @@ function AddMovieForm(props) {
             date: Date,
             details:Details
         }
-        props.onRefresh()
        await fetch('https://moviestore-9dbbc-default-rtdb.firebaseio.com/movielist.json',{
             method:'POST',
             body:JSON.stringify(movie)
         })
-       
-       
+        props.onRefresh()
        }
     }
   return (
