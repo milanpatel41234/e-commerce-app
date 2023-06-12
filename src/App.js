@@ -11,6 +11,7 @@ import About from "./Pages/About";
 import MovieStore from "./Pages/MovieStore";
 import ContactUs from "./Pages/ContactUs";
 import Cart from './Components/Cart/Cart'
+import LoginPage from "./Pages/LoginPage";
 
 function App() {
   const [CartState,setCartState] = useState(false);
@@ -47,6 +48,9 @@ function App() {
     </Route>
     <Route path='/contactUs'>
       <ContactUs/>
+    </Route>
+    <Route path='/login'>
+      <LoginPage/>
     </Route>
       </CartProvider>
       {/* <Footer/> */}

@@ -43,6 +43,10 @@ const Cart = (props) => {
       </tr>
     ));
   }
+  const HandlePurchase=()=>{
+    ctx.items = []
+    alert('your order will be deliverd within 2 days')
+  }
   return (
     <Container
       style={{
@@ -109,7 +113,7 @@ const Cart = (props) => {
               <thead>
                 <tr>
                   <td style={{width:'10rem'}}><b>TOTAL-</b> Rs {ctx.totalAmount}</td>
-                  <td><Button variant="info">Purchase</Button></td>
+                  <td><Button onClick={HandlePurchase} variant="info">Purchase</Button></td>
                   
                 </tr>
               </thead>
