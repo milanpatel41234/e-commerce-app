@@ -44,8 +44,8 @@ const Cart = (props) => {
     ));
   }
   const HandlePurchase=()=>{
-    ctx.items = []
-    alert('your order will be deliverd within 2 days')
+    ctx.purchaseItem()
+    alert(`Odered successfully(TOTAL-AMOUNT: ${ctx.totalAmount})`)
   }
   return (
     <Container

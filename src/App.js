@@ -5,15 +5,18 @@ import Brand from "./Components/Navbar/Brand";
 import HeaderNavbar from "./Components/Navbar/Navbar";
 import CartProvider from "./Components/Store/CartProvider";
 import {Route,Redirect} from 'react-router-dom'
-//import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Home from "./Pages/Home";
+import Home from "./Pages/Home"
 import About from "./Pages/About";
 import MovieStore from "./Pages/MovieStore";
 import ContactUs from "./Pages/ContactUs";
 import Cart from './Components/Cart/Cart'
 import LoginPage from "./Pages/LoginPage";
+import ProductPage from "./Pages/ProductPage";
+import { useContext } from "react";
+import AuthContext from "./Components/Store/AuthContext";
 
 function App() {
+  const Authctx = useContext(AuthContext)
   const [CartState,setCartState] = useState(false);
   const ShowCart=()=>{
  setCartState(true)
@@ -22,23 +25,21 @@ function App() {
  setCartState(false)
   }
 
-  // const router = createBrowserRouter([
-  //   {path:'/', element:  <Home cartstate={CartState} hidecart={HideCart}/>},
-  //   {path:'/about', element:  <About/>},
-  //   {path:'/store', element:  <MovieStore/>},
-  // ])
+
   return (
     <div className="layout">
       <CartProvider>
       <HeaderNavbar onClick={ShowCart} />
       <Brand/>
       {CartState && <Cart onClick={HideCart}/>}
-    {/* <RouterProvider router={router}/> */}
     <Route path='/' exact>
     <Redirect to='/home'/>
     </Route>
-    <Route path='/home'>
-    <Home/>
+    <Route path='/home' exact>
+    <Home />
+    </Route>
+    <Route path='/productpage'>
+    {Authctx.loginState ? <ProductPage/> : <Redirect to='/login'/>}
     </Route>
     <Route path='/about'>
       <About/>

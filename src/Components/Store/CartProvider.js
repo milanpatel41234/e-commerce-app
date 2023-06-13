@@ -50,12 +50,16 @@ function CartProvider(props) {
   const RemoveItem = (item) => {
     dispatchaction({ type: "REMOVE", item: item });
   };
+  const PurchaseItem = () => {
+    dispatchaction({ type: "PURCHASE",});
+  };
 
   const cartContext = {
     items: cartstate.items,
     totalAmount: cartstate.totalAmount,
     addItem: AddItem,
     removeItem: RemoveItem,
+    purchaseItem:PurchaseItem,
   };
   return (
     <CartContext.Provider value={cartContext}>
