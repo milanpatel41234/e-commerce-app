@@ -3,12 +3,46 @@ import { useContext } from "react";
 import { Col , Button} from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import CartContext from "../Store/Cart-Context";
+import AuthContext from "../Store/AuthContext";
 
 
 function Item(props) {
-    const ctx = useContext(CartContext);
-    const AddItem=(item)=>{
-    ctx.addItem(item)
+  const {userName} = useContext(AuthContext)
+  const Cartctx = useContext(CartContext);
+    const AddItem = async (item)=>{
+      const ItemIndex = Cartctx.items.findIndex((i)=> i.imageUrl === item.imageUrl);
+      if(ItemIndex > -1){
+       const updateQuantity = Cartctx.items[ItemIndex].quantity + 1 ;
+       try {
+        const response = await fetch(`https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${userName}/${Cartctx.items[ItemIndex].key}.json`,{
+          method:'PATCH',
+          body:JSON.stringify({ quantity: updateQuantity})
+      });
+        if(!response.ok){
+          throw new Error('Unable to fetch! Something went wronge.')
+        }else{
+        // await response.json();
+        Cartctx.fetchCartItems()
+        }
+      } catch (error) {
+         console.log(error.message)
+      } 
+      } else{
+      try {
+        const response = await fetch(`https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${userName}.json`,{
+          method:'POST',
+          body:JSON.stringify(item)
+      });
+        if(!response.ok){
+          throw new Error('Unable to fetch! Something went wronge.')
+        }else{
+        //await response.json();
+        Cartctx.fetchCartItems()
+        }
+      } catch (error) {
+         console.log(error.message)
+      } 
+    }
     }
   return (
     <Col>

@@ -21,7 +21,7 @@ const AuthForm = () => {
     const Password = PasswordRef.current.value;
     if (isLogin) {
       try {
-        const VarifyUser = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD0MqdL_RefR-qyUUwgnzLvNKPNaEqFjls',
+        const VarifyUser = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD6kR0A7gugrvx1qgBMXJ7kbY6p0UXq6iw',
         {
           method: "POST",
           body: JSON.stringify({
@@ -34,7 +34,7 @@ const AuthForm = () => {
         if (data.error) {
           throw new Error(data.error.message);
         }else{
-          ctx.setUserVerified(data.idToken);
+          ctx.setUserVerified(data);
           alert('Log in successfull')
           history.replace('/')
         }
@@ -44,7 +44,7 @@ const AuthForm = () => {
     } else {
       try {
         const newUser = await fetch(
-          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD0MqdL_RefR-qyUUwgnzLvNKPNaEqFjls",
+          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD6kR0A7gugrvx1qgBMXJ7kbY6p0UXq6iw",
           {
             method: "POST",
             body: JSON.stringify({

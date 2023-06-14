@@ -9,17 +9,31 @@ import {
   Card,
 } from "react-bootstrap";
 import CartContext from "../Store/Cart-Context";
+import AuthContext from "../Store/AuthContext";
 
 const Cart = (props) => {
   const ctx = useContext(CartContext);
-
-  const RemoveItem = (item) => {
-    ctx.removeItem(item);
+const {userName} = useContext(AuthContext)
+  const RemoveItem = async (item) => {
+    try {
+      const response = await fetch(`https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${userName}/${item.key}.json`,{
+        method:'DELETE' });
+      if(!response.ok){
+        throw new Error('Unable to remove! Something went wronge.')
+      }else{
+      //await response.json();
+      ctx.fetchCartItems()
+      }
+    } catch (error) {
+       console.log(error.message)
+    } 
   };
   let CartItems = <tr><td> Upps! No items Available</td></tr>;
+
+ 
   if (ctx.items.length > 0) {
     CartItems = ctx.items.map((item, index) => (
-      <tr key={item.id}>
+      <tr key={item.key}>
         <td>{index + 1}</td>
         <td>
           <Card.Img
@@ -47,6 +61,8 @@ const Cart = (props) => {
     ctx.purchaseItem()
     alert(`Odered successfully(TOTAL-AMOUNT: ${ctx.totalAmount})`)
   }
+
+
   return (
     <Container
       style={{

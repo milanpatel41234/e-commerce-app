@@ -1,5 +1,6 @@
 import CartContext from "./Cart-Context";
-import { useReducer } from "react";
+import { useReducer , useEffect,useContext } from "react";
+import AuthContext from "./AuthContext";
 
 const DefaultCartState = {
   items: [],
@@ -9,21 +10,7 @@ const CartReduser = (state, action) => {
   if (action.type === "ADD") {
     const updateamount =
       state.totalAmount + action.item.price * action.item.quantity;
-    const ItemIndex = state.items.findIndex(
-      (item) => item.id === action.item.id
-    );
-    let updateitems;
-    if (ItemIndex > -1) {
-      const existingitem = {
-        ...state.items[ItemIndex],
-        quantity: state.items[ItemIndex].quantity + action.item.quantity,
-      };
-      const Olditems = [...state.items];
-      Olditems[ItemIndex] = existingitem;
-      updateitems = Olditems;
-    } else {
-      updateitems = state.items.concat(action.item);
-    }
+      const  updateitems = state.items.concat(action.item)
     return {
       items: updateitems,
       totalAmount: updateamount,
@@ -42,7 +29,11 @@ const CartReduser = (state, action) => {
   return DefaultCartState;
 };
 function CartProvider(props) {
+  const {userName , loginState} = useContext(AuthContext)
   const [cartstate, dispatchaction] = useReducer(CartReduser, DefaultCartState);
+  useEffect(()=>{
+    FetchCartItems()
+ },[loginState])
 
   const AddItem = (item) => {
     dispatchaction({ type: "ADD", item: item });
@@ -53,12 +44,40 @@ function CartProvider(props) {
   const PurchaseItem = () => {
     dispatchaction({ type: "PURCHASE",});
   };
+ 
+  async function FetchCartItems() {
+    try {
+      const response = await fetch(`https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${userName}.json`);
+      if(!response.ok){
+        throw new Error('Unable to fetch! Something went wronge.')
+      }else{
+        dispatchaction({ type: "NOACTION",});
+      const data = await response.json();
+      for(const key in data){
+        const item = {
+          title:data[key].title,
+          price:data[key].price,
+          quantity:data[key].quantity,
+          key:key,
+          imageUrl:data[key].imageUrl,
+        }
+      AddItem(item)
+      }
+      }
+    } catch (error) {
+        console.log(error.message)
+    } 
+  }
+ 
+const Fetch=()=>{ FetchCartItems()}
 
   const cartContext = {
     items: cartstate.items,
     totalAmount: cartstate.totalAmount,
     addItem: AddItem,
+    fetchCartItems:Fetch,
     removeItem: RemoveItem,
+   
     purchaseItem:PurchaseItem,
   };
   return (
