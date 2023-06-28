@@ -1,7 +1,9 @@
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import classes from "./AuthForm.module.css";
-import AuthContext from "../Store/AuthContext";
+//import AuthContext from "../Store/AuthContext";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useDispatch } from "react-redux";
+import { AuthAction} from "../Redux-Store/index";
 
 const AuthForm = () => {
   const history = useHistory()
@@ -9,11 +11,14 @@ const AuthForm = () => {
   const [SendingRequest,setSendingRequest] = useState(false);
   const EmailRef = useRef();
   const PasswordRef = useRef();
-  const ctx = useContext(AuthContext)
+  //const ctx = useContext(AuthContext);
+  const dispatch = useDispatch()
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
  
+
+  
   const HandleSubmit = async (e) => {
     e.preventDefault();
    setSendingRequest(true);
@@ -34,9 +39,11 @@ const AuthForm = () => {
         if (data.error) {
           throw new Error(data.error.message);
         }else{
-          ctx.setUserVerified(data);
+          dispatch(AuthAction.setUserLogin(data))
+          //ctx.setUserVerified(data);
           alert('Log in successfull')
-          history.replace('/')
+          history.replace('/');
+          console.log('yesssss')
         }
       } catch (error) {
         alert(error.message);

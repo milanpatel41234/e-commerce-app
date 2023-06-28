@@ -77,7 +77,6 @@ const Fetch=()=>{ FetchCartItems()}
     addItem: AddItem,
     fetchCartItems:Fetch,
     removeItem: RemoveItem,
-   
     purchaseItem:PurchaseItem,
   };
   return (
