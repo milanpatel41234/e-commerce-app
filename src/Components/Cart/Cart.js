@@ -10,26 +10,20 @@ import {
 } from "react-bootstrap";
 import CartContext from "../Store/Cart-Context";
 import AuthContext from "../Store/AuthContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { CartAction } from "../Redux-Store";
 
 const Cart = (props) => {
-  const CartState = useSelector(state=>state.CartSlice)
+  const CartState = useSelector(state=>state.CartSlice);
+  const dispatch = useDispatch()
   const ctx = useContext(CartContext);
 const {userName} = useContext(AuthContext)
-  const RemoveItem = async (item) => {
-    try {
-      const response = await fetch(`https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${CartState.userName}/${item.key}.json`,{
-        method:'DELETE' });
-      if(!response.ok){
-        throw new Error('Unable to remove! Something went wronge.')
-      }else{
-      //await response.json();
-      ctx.fetchCartItems()
-      }
-    } catch (error) {
-       console.log(error.message)
-    } 
+  const RemoveItem =  (item) => {
+    const TempItems = [...CartState.items];
+    const FilteredItems = TempItems.filter(i => i.id !== item.id);
+     dispatch(CartAction.AddCartItem(FilteredItems));
   };
+
   let CartItems = <tr><td> Upps! No items Available</td></tr>;
 
  

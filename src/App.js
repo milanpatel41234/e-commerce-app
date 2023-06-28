@@ -11,6 +11,7 @@ import { Suspense , lazy} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CartAction } from "./Components/Redux-Store";
 import Home from "./Pages/Home"
+import { useEffect } from "react";
 //import About from "./Pages/About";
 //import MovieStore from "./Pages/MovieStore";
 //import ContactUs from "./Pages/ContactUs";
@@ -25,18 +26,20 @@ const ProductPage = lazy(()=> import("./Pages/ProductPage"))
 const MovieStore = lazy(()=> import( "./Pages/MovieStore"))
 //const Home = lazy(()=> import("./Pages/Home"))
 const Cart = lazy(()=> import('./Components/Cart/Cart'))
+let SandCartData = false;
 
 function App() {
   //const Authctx = useContext(AuthContext);
-  const AuthState = useSelector(state => state.AuthSlice)
-  const [CartState,setCartState] = useState(false);
+  const AuthState = useSelector(state => state.AuthSlice);
+  const CartState = useSelector(state => state.CartSlice);
+  const [CartIsVisible,setCartIsVisible] = useState(false);
   const ShowCart=()=>{
- setCartState(true)
+ setCartIsVisible(true)
   }
   const HideCart=()=>{
- setCartState(false)
+ setCartIsVisible(false)
   }
-
+ 
   const [FetchCartFirstTime, setFetchCartFirstTime] = useState(true);
   const dispatch = useDispatch()
   const FetchCartItems = async () =>{
@@ -63,6 +66,50 @@ function App() {
     FetchCartItems();
     setFetchCartFirstTime(false);
   }
+ 
+    const AddItemToBackend = async() =>{
+      if (CartState.key) {
+        try {
+          const response = await fetch(
+            `https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${AuthState.UserName}/CartItems/${CartState.key}.json`,
+            {
+              method: "PUT",
+              body: JSON.stringify(CartState.items),
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Unable to fetch! Something went wronge.");
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+       } else {
+        try {
+          const response = await fetch(
+            `https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${AuthState.UserName}/CartItems.json`,
+            {
+              method: "POST",
+              body: JSON.stringify(CartState.items),
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Unable to fetch! Something went wronge.");
+          } else {
+            const data =  await response.json();
+             dispatch(CartAction.AddKey(data.name));
+           }
+        } catch (error) {
+          console.log(error.message);
+        }
+     }
+    }
+ useEffect(()=>{
+  if (SandCartData){  
+    AddItemToBackend()
+  }else{
+    SandCartData = true;
+  }
+ },[CartState.items])
 
   return (
     <div className="layout">
@@ -70,7 +117,7 @@ function App() {
       <CartProvider>
       <HeaderNavbar onClick={ShowCart} />
       <Brand/>
-      {CartState && <Cart onClick={HideCart}/>}
+      {CartIsVisible && <Cart onClick={HideCart}/>}
     <Route path='/' exact>
     <Redirect to='/home'/>
     </Route>

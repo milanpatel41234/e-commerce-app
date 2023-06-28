@@ -5,7 +5,6 @@ import { CartAction } from "../Redux-Store";
 
 function Item(props) {
   const CartState = useSelector((state) => state.CartSlice);
-  const AuthState = useSelector((state) => state.AuthSlice);
   const dispatch = useDispatch()
   const AddItem = async (item) => {
     const ItemIndex = CartState.items.findIndex(
@@ -23,9 +22,6 @@ function Item(props) {
       TempCartItems.push(item);
     }
     dispatch(CartAction.AddCartItem(TempCartItems));
-    setTimeout(()=>{
-      props.AddItemToBackend()
-    }, 1000)
    }
    
   return (
