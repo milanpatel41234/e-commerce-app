@@ -3,10 +3,8 @@ import "./App.css";
 import Brand from "./Components/Navbar/Brand";
 //import Footer from "./Components/Navbar/Footer";
 import HeaderNavbar from "./Components/Navbar/Navbar";
-import CartProvider from "./Components/Store/CartProvider";
 import {Route,Redirect} from 'react-router-dom'
-// import { useContext } from "react";
-// import AuthContext from "./Components/Store/AuthContext";
+
 import { Suspense , lazy} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CartAction } from "./Components/Redux-Store";
@@ -29,7 +27,7 @@ const Cart = lazy(()=> import('./Components/Cart/Cart'))
 let SandCartData = false;
 
 function App() {
-  //const Authctx = useContext(AuthContext);
+  
   const AuthState = useSelector(state => state.AuthSlice);
   const CartState = useSelector(state => state.CartSlice);
   const [CartIsVisible,setCartIsVisible] = useState(false);
@@ -62,10 +60,16 @@ function App() {
         console.log(error.message)
     } 
   }
-  if(AuthState.LoginState && FetchCartFirstTime){
-    FetchCartItems();
-    setFetchCartFirstTime(false);
-  }
+  useEffect(()=>{
+    if(AuthState.LoginState && FetchCartFirstTime){
+      FetchCartItems();
+      setFetchCartFirstTime(false);
+    }else if(!AuthState.LoginState && !FetchCartFirstTime){
+      FetchCartItems();
+      setFetchCartFirstTime(true);
+    }
+  },[AuthState.LoginState , FetchCartFirstTime])
+  
  
     const AddItemToBackend = async() =>{
       if (CartState.key) {
@@ -114,7 +118,7 @@ function App() {
   return (
     <div className="layout">
       <Suspense fallback={<p>Loding...</p>}>
-      <CartProvider>
+    
       <HeaderNavbar onClick={ShowCart} />
       <Brand/>
       {CartIsVisible && <Cart onClick={HideCart}/>}
@@ -139,7 +143,7 @@ function App() {
     <Route path='/login'>
       <LoginPage/>
     </Route>
-      </CartProvider>
+     
       {/* <Footer/> */}
       </Suspense>
     </div>

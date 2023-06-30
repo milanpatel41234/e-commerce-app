@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Container,
   Row,
@@ -8,21 +8,26 @@ import {
   Badge,
   Card,
 } from "react-bootstrap";
-import CartContext from "../Store/Cart-Context";
-import AuthContext from "../Store/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { CartAction } from "../Redux-Store";
 
 const Cart = (props) => {
   const CartState = useSelector(state=>state.CartSlice);
   const dispatch = useDispatch()
-  const ctx = useContext(CartContext);
-const {userName} = useContext(AuthContext)
+ 
   const RemoveItem =  (item) => {
     const TempItems = [...CartState.items];
     const FilteredItems = TempItems.filter(i => i.id !== item.id);
      dispatch(CartAction.AddCartItem(FilteredItems));
   };
+const PurchaseItems= ()=>{
+  const TempItems = [];
+  dispatch(CartAction.AddCartItem(TempItems));
+
+}
+  const TotalAmount = CartState.items.reduce((curNum ,item)=>{
+    return (curNum + (item.quantity*item.price))
+  },0)
 
   let CartItems = <tr><td> Upps! No items Available</td></tr>;
 
@@ -53,21 +58,7 @@ const {userName} = useContext(AuthContext)
       </tr>
     ));
   }
-  const HandlePurchase= async ()=>{
-    try {
-      const response = await fetch(`https://ecommerce-c4d9a-default-rtdb.firebaseio.com/${userName}.json`,{
-        method:'DELETE' });
-      if(!response.ok){
-        throw new Error('Unable to remove! Something went wronge.')
-      }else{
-      //await response.json();
-      ctx.fetchCartItems()
-      }
-    } catch (error) {
-       console.log(error.message)
-    } 
-    alert(`Odered successfully(TOTAL-AMOUNT: ${ctx.totalAmount})`)
-  }
+ 
 
 
   return (
@@ -135,8 +126,8 @@ const {userName} = useContext(AuthContext)
             <Table>
               <thead>
                 <tr>
-                  <td style={{width:'10rem'}}><b>TOTAL-</b> Rs {ctx.totalAmount}</td>
-                  <td><Button onClick={HandlePurchase} variant="info">Purchase</Button></td>
+                  <td style={{width:'10rem'}}><b>TOTAL-</b> Rs {TotalAmount}</td>
+                  <td><Button  variant="info" onClick={PurchaseItems}>Purchase</Button></td>
                   
                 </tr>
               </thead>

@@ -37,7 +37,6 @@ const AuthSlice = createSlice({
         localStorage.setItem('UserName', cleanedEmail)
         state.LoginState = true;
         state.UserName = cleanedEmail;
-        console.log(cleanedEmail , localStorage.getItem('UserName'));
     }
   },
 });
