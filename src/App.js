@@ -15,14 +15,11 @@ import { useEffect } from "react";
 //import ContactUs from "./Pages/ContactUs";
 //import Cart from './Components/Cart/Cart';
 //import LoginPage from "./Pages/LoginPage";
-//import ProductPage from "./Pages/ProductPage";
+import ProductPage from "./Pages/ProductPage";
 
 const About = lazy(()=> import("./Pages/About"))
 const ContactUs = lazy(()=> import("./Pages/ContactUs"))
 const LoginPage = lazy(()=> import("./Pages/LoginPage"))
-const ProductPage = lazy(()=> import("./Pages/ProductPage"))
-const MovieStore = lazy(()=> import( "./Pages/MovieStore"))
-//const Home = lazy(()=> import("./Pages/Home"))
 const Cart = lazy(()=> import('./Components/Cart/Cart'))
 let SandCartData = false;
 
@@ -133,9 +130,6 @@ function App() {
     </Route>
     <Route path='/about'>
       <About/>
-    </Route>
-    <Route path='/store'>
-    {AuthState.LoginState ? <MovieStore/> : <Redirect to='/login'/>}
     </Route>
     <Route path='/contactUs'>
       <ContactUs/>

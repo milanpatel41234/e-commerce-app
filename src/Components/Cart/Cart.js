@@ -15,7 +15,8 @@ const Cart = (props) => {
   const CartState = useSelector(state=>state.CartSlice);
   const dispatch = useDispatch()
  
-  const RemoveItem =  (item) => {
+  const RemoveItem = (item) => {
+   
     const TempItems = [...CartState.items];
     const FilteredItems = TempItems.filter(i => i.id !== item.id);
      dispatch(CartAction.AddCartItem(FilteredItems));
@@ -23,13 +24,13 @@ const Cart = (props) => {
 const PurchaseItems= ()=>{
   const TempItems = [];
   dispatch(CartAction.AddCartItem(TempItems));
-
+ alert('Order placed successfully')
 }
   const TotalAmount = CartState.items.reduce((curNum ,item)=>{
     return (curNum + (item.quantity*item.price))
   },0)
 
-  let CartItems = <tr><td> Upps! No items Available</td></tr>;
+  let CartItems = <tr><td>No items Available</td></tr>;
 
  
   if (CartState.items.length > 0) {

@@ -22,8 +22,7 @@ function HeaderNavbar(props) {
         <Container >
           <Nav className="me-auto" >
            <h4><NavLink className='mx-5' to='/productPage'>ProductsPage</NavLink></h4> 
-           <h4><Link className='mx-5' to='/store'>MovieStore</Link></h4> 
-           <h4><Link className='mx-5' to='/about'>About</Link></h4> 
+           <h4><Link className='mx-5' to='/about'>About Us</Link></h4> 
           </Nav>
            <Link  to='/contactUs'><i>Contact Us</i></Link>
            {!AuthState.LoginState && <Link className='mx-2' to='/login'>Login</Link>}
